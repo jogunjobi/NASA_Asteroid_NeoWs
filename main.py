@@ -38,15 +38,13 @@ def get_neos(end_date, table_name):
     extracted_data = []
     for day in range((end_date - start_date).days):
         # running in data batches so as not to overload the endpoint
-        batch_start_date = start_date + datetime.timedelta(days=day)
-        batch_end_date = batch_start_date + datetime.timedelta(days=6)
-        batch_start_date_string = batch_start_date.strftime('%Y-%m-%d')
-        batch_end_date_string = batch_end_date.strftime('%Y-%m-%d')
-        response = requests.get(endpoint, params={'start_date': batch_start_date_string, 'end_date': batch_end_date_string, 'api_key': api_key})
+        query_date = start_date + datetime.timedelta(days=day)
+        query_date_string = query_date.strftime('%Y-%m-%d')
+        response = requests.get(endpoint, params={'start_date': query_date_string, 'end_date': query_date_string, 'api_key': api_key})
 
         # Extract NEO data from API response
         try:
-            neo_data = response.json()['near_earth_objects'][batch_start_date_string]
+            neo_data = response.json()['near_earth_objects'][query_date_string]
 
             for neo in neo_data:
                 hold = {}
