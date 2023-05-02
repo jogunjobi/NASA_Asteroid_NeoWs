@@ -3,6 +3,7 @@ import sqlite3
 import datetime
 import pytz
 import os
+import argparse
 
 
 endpoint = 'https://api.nasa.gov/neo/rest/v1/feed'
@@ -81,5 +82,9 @@ def get_neos(end_date, table_name):
 
 
 if __name__ == '__main__':
-    end_date = datetime.date.today()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--input_date', type=str, required=True)
+    args = parser.parse_args()
+    end_date_input = args.input_date
+    end_date = datetime.datetime.strptime(end_date_input, "%Y-%m-%d").date()
     get_neos(end_date, 'neos')
